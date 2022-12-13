@@ -51,7 +51,7 @@ const light1 = new DirectionalLight(
 );
 
 var freza;
-SceneLoader.ImportMesh("", "public/", "endmill.glb", scene, function (
+SceneLoader.ImportMesh("", "public/", "mec.glb", scene, function (
   newMeshes
 ) {
   // Pozice, měřítko a rotace
