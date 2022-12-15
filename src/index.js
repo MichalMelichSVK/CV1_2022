@@ -9,6 +9,8 @@ import {
   StandardMaterial,
   DirectionalLight,
   Vector3,
+  Axis,
+  Space,
   Color3,
   SceneLoader,
   DeviceOrientationCamera,
@@ -51,14 +53,13 @@ const light1 = new DirectionalLight(
 );
 
 var freza;
-SceneLoader.ImportMesh("", "public/", "mec.glb", scene, function (
+SceneLoader.ImportMesh("", "public/", "MineCraftSword.stl", scene, function (
   newMeshes
 ) {
   // Pozice, měřítko a rotace
-  newMeshes[0].scaling = new Vector3(0.15, 0.15, 0.175);
+  newMeshes[0].scaling = new Vector3(0.5, 0.5, 0.7);
   newMeshes[0].rotate(new Vector3(-1, 0, 0), Math.PI / 2);
-  newMeshes[0].position.z = -2;
-  newMeshes[0].position.x = 1;
+  newMeshes[0].rotate(new Vector3(0, 0, 1), Math.PI);
   freza = newMeshes[0];
 });
 
