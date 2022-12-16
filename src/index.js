@@ -6,9 +6,11 @@ import {
   Scene,
   UniversalCamera,
   MeshBuilder,
+  Path3D,
   StandardMaterial,
   DirectionalLight,
   Vector3,
+  Math,
   Axis,
   Space,
   Color3,
@@ -18,6 +20,7 @@ import {
   Animation
 } from "@babylonjs/core";
 import "@babylonjs/inspector";
+import { shadowOnlyPixelShader } from "@babylonjs/materials/shadowOnly/shadowOnly.fragment";
 
 //canvas je grafické okno, to rozáhneme přes obrazovku
 const canvas = document.getElementById("renderCanvas");
@@ -52,19 +55,44 @@ const light1 = new DirectionalLight(
   scene
 );
 
-var freza;
+//vytvoření cesty
+
+//vykreslení křivky
+var sword = MeshBuilder.CreateCylinder("sword", { diameter: 0.00001 });
+
 SceneLoader.ImportMesh("", "public/", "MineCraftSword.stl", scene, function (
-  newMeshes
+  newMesh
 ) {
-  // Pozice, měřítko a rotace
-  newMeshes[0].scaling = new Vector3(0.5, 0.5, 0.7);
-  newMeshes[0].rotate(new Vector3(-1, 0, 0), Math.PI / 2);
-  newMeshes[0].rotate(new Vector3(0, 0, 1), Math.PI);
-  freza = newMeshes[0];
+  newMesh[0].rotate(new Vector3(-1, 0, 0), 80);
+  newMesh[0].position = new Vector3(-1, 2, 0);
+  sword = newMesh[0];
+  shadowOnlyPixelShader.scaling = new Vector3(1, 1, 1);
 });
 
-scene.registerBeforeRender(function () {});
-//zde uděláme animaci
+//úhly a rotace
+
+var x = 0;
+scene.registerBeforeRender(function () {
+  if (sword.position.y < 3 && x == 0) {
+    sword.position.y += 0.05;
+  }
+
+  if (sword.position.y > 1 && x == 1) {
+    sword.position.y -= 0.05;
+  }
+
+  if (sword.position.y == 3) {
+    x = 1;
+  }
+
+  if (sword.position.y == 1) {
+    x = 0;
+  }
+
+  sword.rotate(new Vector3(0, 0, 1), (sword.rotation.y = 0.01));
+});
+
+//animace
 
 // povinné vykreslování
 engine.runRenderLoop(function () {
@@ -75,4 +103,4 @@ const environment1 = scene.createDefaultEnvironment({
 });
 // zde uděláme VR prostředí
 
-//scene.debugLayer.show();
+scene.debugLayer.show();
